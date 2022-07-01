@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 const app = express()
 const port = process.env.PORT || 5000;
@@ -34,7 +34,24 @@ async function run() {
             res.send(allTasks);
 
         })
-        /*  app.get('/tools', async (req, res) => {
+        app.delete('/tasks/:id', async(req, res) =>{
+            const id= req.params.id;
+            const query = {_id: ObjectId(id)}
+            const deleteData = await tasksCollection.deleteOne(query);
+            res.send(deleteData);
+        })
+        
+        /* 
+        // Deleting manage product  data 
+            app.delete('/tools/:id', async(req, res) =>{
+                const id = req.params.id;
+                const query = {_id: ObjectId(id)};
+                const manageData = await toolsCollection.deleteOne(query);
+                res.send(manageData);
+            });
+        
+        
+        app.get('/tools', async (req, res) => {
                     const query = {};
                     const cursor = toolsCollection.find(query)
                     const tools = await cursor.toArray();
@@ -78,13 +95,7 @@ async function run() {
                     res.send(deleteProduct);
                 })
         
-        // Deleting manage product  data 
-            app.delete('/tools/:id', async(req, res) =>{
-                const id = req.params.id;
-                const query = {_id: ObjectId(id)};
-                const manageData = await toolsCollection.deleteOne(query);
-                res.send(manageData);
-            });
+        
         
             
          // user information put process (update data)
