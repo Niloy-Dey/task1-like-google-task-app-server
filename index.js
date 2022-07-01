@@ -27,6 +27,13 @@ async function run() {
             res.send(postTask);
         })
 
+        app.get('/tasks' , async(req, res) =>{
+            const taskQuery = {};
+            const cursor = tasksCollection.find(taskQuery);
+            const allTasks = await cursor.toArray();
+            res.send(allTasks);
+
+        })
         /*  app.get('/tools', async (req, res) => {
                     const query = {};
                     const cursor = toolsCollection.find(query)
