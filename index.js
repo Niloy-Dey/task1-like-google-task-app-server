@@ -19,6 +19,7 @@ async function run() {
     try {
         await client.connect();
         const tasksCollection = client.db('like-google-task-app-server').collection('tasks');
+        const completedTaskCollection = client.db('like-google-task-app-server').collection('completedTask');
 
 
         app.post('/tasks' , async(req, res) =>{
@@ -40,8 +41,60 @@ async function run() {
             const deleteData = await tasksCollection.deleteOne(query);
             res.send(deleteData);
         })
+
+        // app.put('/tasks/:id', async(req, res) =>{
+        //     const id = req.params.id;
+        //     console.log(id);
+
+        //     const updateText= req.params.text;
+        //     const filter = {text : updateText };
+        //     const option = {upsert: true};
+        //     const updateData = {$set: text};
+        //     const result = await tasksCollection.updateOne(filter, updateData, option);
+        //     res.send(result);
+        // })
+
+       
+
+        app.post('/completedTask/:id' , async(req, res) =>{
+            const completeTask = req.body;
+            const postCompleteTask = await completedTaskCollection.insertOne(completeTask);
+            res.send(postCompleteTask);
+        })
+
+
+
+        app.get('/completedTask', async(req, res) =>{
+            const query = {};
+            const completedTask = completedTaskCollection.find(query);
+            const allCompletedTask = await completedTask.toArray()
+            res.send(allCompletedTask);
+        })
+
+
+        app.delete('/completedTask/:id', async(req, res) =>{
+            const id= req.params.id;
+            const query = {_id: ObjectId(id)}
+            const deleteData = await completedTaskCollection.deleteOne(query);
+            res.send(deleteData);
+        })
+        
+
+
         
         /* 
+         // user information put process (update data)
+         app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+          })
+        
+
         // Deleting manage product  data 
             app.delete('/tools/:id', async(req, res) =>{
                 const id = req.params.id;
