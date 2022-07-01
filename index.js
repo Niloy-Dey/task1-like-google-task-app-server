@@ -12,13 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 
-
 const uri = "mongodb+srv://like-google-task-app-server:wWtzb0SiK3ZiYCD6@cluster0.7n3mc.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
     try {
-
         await client.connect();
         const tasksCollection = client.db('like-google-task-app-server').collection('tasks');
 
