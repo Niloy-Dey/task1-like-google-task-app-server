@@ -42,15 +42,14 @@ async function run() {
             res.send(deleteData);
         })
 
-        // app.put('/tasks/:id', async(req, res) =>{
-        //     const id = req.params.id;
-        //     console.log(id);
+        // app.put('/tasks/:text', async(req, res) =>{
+        //     const text = req.params.text;
 
-        //     const updateText= req.params.text;
-        //     const filter = {text : updateText };
+        //     const filter = {text : text };
         //     const option = {upsert: true};
         //     const updateData = {$set: text};
-        //     const result = await tasksCollection.updateOne(filter, updateData, option);
+        //     const result = await tasksCollection.updateOne(filter, updateData,option );
+
         //     res.send(result);
         // })
 
