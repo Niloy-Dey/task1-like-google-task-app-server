@@ -15,6 +15,7 @@ app.use(express.json());
 const uri = "mongodb+srv://like-google-task-app-server:wWtzb0SiK3ZiYCD6@cluster0.7n3mc.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+
 async function run() {
     try {
         await client.connect();
@@ -22,12 +23,15 @@ async function run() {
         const completedTaskCollection = client.db('like-google-task-app-server').collection('completedTask');
 
 
+        // post method for Added task 
         app.post('/tasks' , async(req, res) =>{
             const newTask = req.body;
             const postTask = await tasksCollection.insertOne(newTask);
             res.send(postTask);
         })
 
+
+        // get method for showing task data in home page
         app.get('/tasks' , async(req, res) =>{
             const taskQuery = {};
             const cursor = tasksCollection.find(taskQuery);
@@ -35,12 +39,17 @@ async function run() {
             res.send(allTasks);
 
         })
+
+        // delete method for 
         app.delete('/tasks/:id', async(req, res) =>{
             const id= req.params.id;
             const query = {_id: ObjectId(id)}
             const deleteData = await tasksCollection.deleteOne(query);
             res.send(deleteData);
         })
+
+
+        // put method for update task data 
 
         // app.put('/tasks/:text', async(req, res) =>{
         //     const text = req.params.text;
@@ -55,6 +64,7 @@ async function run() {
 
        
 
+        // post method for add completed data  in completed page 
         app.post('/completedTask/:id' , async(req, res) =>{
             const completeTask = req.body;
             const postCompleteTask = await completedTaskCollection.insertOne(completeTask);
@@ -63,6 +73,7 @@ async function run() {
 
 
 
+        // get method for showing completed task in completed page 
         app.get('/completedTask', async(req, res) =>{
             const query = {};
             const completedTask = completedTaskCollection.find(query);
@@ -71,6 +82,7 @@ async function run() {
         })
 
 
+        // delete method for completed task in home page
         app.delete('/completedTask/:id', async(req, res) =>{
             const id= req.params.id;
             const query = {_id: ObjectId(id)}
@@ -94,48 +106,9 @@ async function run() {
           })
         
 
-        // Deleting manage product  data 
-            app.delete('/tools/:id', async(req, res) =>{
-                const id = req.params.id;
-                const query = {_id: ObjectId(id)};
-                const manageData = await toolsCollection.deleteOne(query);
-                res.send(manageData);
-            });
         
         
-        app.get('/tools', async (req, res) => {
-                    const query = {};
-                    const cursor = toolsCollection.find(query)
-                    const tools = await cursor.toArray();
-                    res.send(tools);
-        
-                })
-        
-        //  single data finding for showing 
-                app.get('/tool/:id', async(req, res) => {
-                    const id = req.params.id;
-                    const query = { _id: ObjectId(id) };
-                    const product = await toolsCollection.findOne(query);
-                    res.send(product);
-                });
-        
-        // post method for orders details 
-            app.post('/orderDetails', async(req, res) =>{
-                const orders= req.body;
-                console.log(orders);
-                const newOrder = await ordersCollection.insertOne(orders);
-                console.log(newOrder);
-                res.send(newOrder);
-            })
-        
-        
-        //post method for adding new tool 
-        app.post('/tools', async(req, res) =>{
-            const newTool = req.body;
-            const result = await toolsCollection.insertOne(newTool);
-            res.send(result);
-        })
-        
+       
         // deleting data for dashboard my orders page 
                 app.delete('/orderDetails/:id', async(req, res) =>{
                     const id = req.params.id;
@@ -146,20 +119,6 @@ async function run() {
                     // console.log(deleteProduct);
                     res.send(deleteProduct);
                 })
-        
-        
-        
-            
-         // user information put process (update data)
-         app.put('/user/:email', async (req, res) => {
-            const email = req.params.email;
-            const user = req.body;
-            const filter = { email: email };
-            const options = { upsert: true };
-            const updateDoc = { $set: user };
-            const result = await userCollection.updateOne(filter, updateDoc, options);
-            res.send(result);
-          })
         
         */
 
